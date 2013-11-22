@@ -1,0 +1,24 @@
+{
+    "name": "ymo/l4-openldap",
+    "type": "library",
+    "description": "An OpenLDAP authentication driver for Laravel 4.",
+    "keywords": ["laravel", "L4", "OpenLDAP", "Authentication", "Laravel 4", "auth"],
+    "homepage": "https://github.com/yuri-moens/l4-openldap",
+    "license": "WTFPL",
+    "authors": [
+        {
+            "name": "Yuri Moens",
+            "email": "yuri.moens@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.0.x"
+    },
+    "autoload": {
+        "psr-0": {
+            "Ymo\\L4OpenLdap": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
