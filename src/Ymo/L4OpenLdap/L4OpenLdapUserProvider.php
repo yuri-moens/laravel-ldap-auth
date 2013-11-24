@@ -54,7 +54,14 @@ class L4OpenLdapUserProvider implements UserProviderInterface {
 
 	public function retrieveByID($identifier)
 	{
-		$result = @ldap_read($this->conn, $identifier, '(objectclass=*)', $this->config['attributes']);
+		$filter = $this->config['filter'];
+		if (strpos($filter, '&'))
+			$filter = substr_replace($filter, '(' . $this->config['user_id_attribute'] . '=' . $identifier . ')', strpos($filter, '&')+1, 0);
+		else
+			$filter = '(&(' . $this->config['user_id_attribute'] . '=' . $identifier . ')' . $filter . ')';
+
+		$result = @ldap_search($this->conn, $this->config['basedn'], $filter);
+
 		if ($result == false)
 			return null;
 
@@ -62,7 +69,14 @@ class L4OpenLdapUserProvider implements UserProviderInterface {
 		if ($entries['count'] == 0 || $entries['count'] > 1)
 			return null;
 
-		$this->model = $this->createGenericUser($entries[0]);
+		if ($this->config['use_db']) {
+			$ldap_value = $entries[0][$this->config['ldap_field']][0];
+			$user = $this->config['db_connection']->table($this->config['db_table'])->where($this->config['db_field'], '=', $ldap_value)->first();
+			$this->model = $this->createGenericUserFromDb($user);
+		}
+		else {
+			$this->model = $this->createGenericUserFromLdap($entries[0]);
+		}
 		return $this->model;
 	}
 
@@ -76,7 +90,7 @@ class L4OpenLdapUserProvider implements UserProviderInterface {
 		if ($entries['count'] == 0 || $entries['count'] > 1)
 			return null;
 
-		$this->model = $this->createGenericUser($entries[0]);
+		$this->model = $this->createGenericUserFromLdap($entries[0]);
 		return $this->model;
 	}
 
@@ -93,11 +107,22 @@ class L4OpenLdapUserProvider implements UserProviderInterface {
 		return true;
 	}
 
-	public function createGenericUser($entry)
+	public function createGenericUserFromLdap($entry)
 	{
-		return new GenericUser([
-			'id' => $entry['uid'][0],
-		]);
+		$parameters = array (
+			'id' => $entry['uidnumber'][0]
+		);
+
+		foreach ($this->config['user_attributes'] as $key => $value) {
+			$parameters[$value] = $entry[$key][0];
+		}
+
+		return new GenericUser($parameters);
+	}
+
+	public function createGenericUserFromDb($entry)
+	{
+		return new GenericUser(get_object_vars($entry));
 	}
 
 }
