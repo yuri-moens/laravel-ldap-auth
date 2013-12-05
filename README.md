@@ -45,7 +45,6 @@ Add this to `app/config/auth.php`.
 
 	'use_db' => true, // set to true if you want to retrieve more information from a database, the next 4 variables are required if this is set to true
 	'ldap_field' => 'uid', // the LDAP field we want to compare to the db_field to find our user
-	'db_connection' => DB::connection(), // the DB connection
 	'db_table' => 'users', // the table where we should look for users
 	'db_field' => 'user_name', // the DB field we want to compare to the ldap_field to find our user
 ),
