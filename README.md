@@ -47,5 +47,7 @@ Add this to `app/config/auth.php`.
 	'ldap_field' => 'uid', // the LDAP field we want to compare to the db_field to find our user
 	'db_table' => 'users', // the table where we should look for users
 	'db_field' => 'user_name', // the DB field we want to compare to the ldap_field to find our user
+	'eloquent' => true, // set to true if you want to return an Eloquent user instead of a GenericUser object
+	'eloquent_user_model' => 'User', // name of the User model
 ),
 ```
