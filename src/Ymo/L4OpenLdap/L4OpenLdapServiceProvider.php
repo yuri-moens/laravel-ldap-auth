@@ -21,7 +21,8 @@ class L4OpenLdapServiceProvider extends ServiceProvider {
         {
         	return new L4OpenLdapGuard(
             	new L4OpenLdapUserProvider(
-                    	$app['config']->get('auth.ldap')
+                    	$app['config']->get('auth.ldap'),
+                    	$app['db']->connection()
                 	),
             	$app->make('session.store')
         	);

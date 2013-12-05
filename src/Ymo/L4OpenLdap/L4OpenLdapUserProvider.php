@@ -16,14 +16,21 @@ use Illuminate\Auth\GenericUser;
 class L4OpenLdapUserProvider implements UserProviderInterface {
 
 	/**
-	 * The Eloquent user model
-	 * @var GenericUser
+	 * The user model
 	 */
 	protected $model;
 
-	public function __construct($config)
+	/**
+	 * The active database connection.
+	 *
+	 * @param  \Illuminate\Database\Connection 
+	 */
+	protected $db_conn;
+
+	public function __construct($config, $db_conn)
 	{
 		$this->config = $config;
+		$this->db_conn = $db_conn;
 
 		if (!$this->conn = ldap_connect("ldap://{$this->config['host']}"))
 		{
@@ -69,15 +76,20 @@ class L4OpenLdapUserProvider implements UserProviderInterface {
 		if ($entries['count'] == 0 || $entries['count'] > 1)
 			return null;
 
-		if ($this->config['use_db']) {
-			$ldap_value = $entries[0][$this->config['ldap_field']][0];
-			$user = $this->config['db_connection']->table($this->config['db_table'])->where($this->config['db_field'], '=', $ldap_value)->first();
-			$this->model = $this->createGenericUserFromDb($user);
-		}
-		else {
-			$this->model = $this->createGenericUserFromLdap($entries[0]);
-		}
-		return $this->model;
+			if ($this->config['use_db']) {
+				$ldap_value = $entries[0][$this->config['ldap_field']][0];
+			    $user = $this->db_conn->table($this->config['db_table'])->where($this->config['db_field'], '=', $ldap_value)->first();
+
+                if ($this->config['eloquent'])
+					$this->model = $this->createModel()->newQuery()->find($user->id);
+				else
+					$this->model = new GenericUser(get_object_vars($user));
+            }
+            else {
+                $this->model = $this->createGenericUserFromLdap($entries[0]);
+            }
+
+            return $this->model;
 	}
 
 	public function retrieveByCredentials(array $credentials)
@@ -120,9 +132,11 @@ class L4OpenLdapUserProvider implements UserProviderInterface {
 		return new GenericUser($parameters);
 	}
 
-	public function createGenericUserFromDb($entry)
+	public function createModel()
 	{
-		return new GenericUser(get_object_vars($entry));
+		$class = '\\' . $this->config['eloquent_user_model'];
+
+		return new $class;
 	}
 
 }
