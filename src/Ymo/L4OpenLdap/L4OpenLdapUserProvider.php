@@ -34,19 +34,19 @@ class L4OpenLdapUserProvider implements UserProviderInterface {
 
 		if (!$this->conn = ldap_connect("ldap://{$this->config['host']}"))
 		{
-			throw new Exception("Could not connect to LDAP host {$this->config['host']}: " . ldap_error($this->conn));
+			throw new \Exception("Could not connect to LDAP host {$this->config['host']}: " . ldap_error($this->conn));
 		}
 
 		if ($this->config['username'] && $this->config['password'] && $this->config['rdn'])
 		{
 			if (!@ldap_bind($this->conn, 'cn=' . $this->config['username'] . ',' . $this->config['rdn'], $this->config['password']))
 			{
-				throw new Exception('Could not bind to AD: ' . ldap_error($this->conn));
+				throw new \Exception('Could not bind to AD: ' . ldap_error($this->conn));
 			}
 		} else {
 			if (!@ldap_bind($this->conn))
 			{
-				throw new Exception('Could not bind to AD: ' . ldap_error($this->conn));
+				throw new \Exception('Could not bind to AD: ' . ldap_error($this->conn));
 			}
 		}
 	}
@@ -122,7 +122,7 @@ class L4OpenLdapUserProvider implements UserProviderInterface {
 	public function createGenericUserFromLdap($entry)
 	{
 		$parameters = array (
-			'id' => $entry['uidnumber'][0]
+			'id' => $entry[$this->config['user_id_attribute']][0]
 		);
 
 		foreach ($this->config['user_attributes'] as $key => $value) {
