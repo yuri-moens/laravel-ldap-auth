@@ -37,6 +37,9 @@ class L4OpenLdapUserProvider implements UserProviderInterface {
 			throw new \Exception("Could not connect to LDAP host {$this->config['host']}: " . ldap_error($this->conn));
 		}
 
+		ldap_set_option($this->conn, LDAP_OPT_PROTOCOL_VERSION, $this->config['version']);
+		ldap_set_option($this->conn, LDAP_OPT_REFERRALS, 0);
+
 		if ($this->config['username'] && $this->config['password'] && $this->config['rdn'])
 		{
 			if (!@ldap_bind($this->conn, 'cn=' . $this->config['username'] . ',' . $this->config['rdn'], $this->config['password']))
