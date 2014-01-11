@@ -33,6 +33,7 @@ Add this to `app/config/auth.php`.
 	'rdn' => 'ou=System,dc=example,dc=com', // rdn used by the user configured below, optional
 	'username' => 'username', // optional
 	'password' => 'thisisasecret', // optional
+	'version'  => '2'	// LDAP protocol version (2 or 3)
 
 	'filter' => '(&(objectclass=posixAccount)(|(status=member)))', // optional
 
