@@ -62,7 +62,17 @@ class L4OpenLdapUserProvider implements UserProviderInterface
         }
     }
 
-    public function retrieveByID($identifier)
+    public function retrieveByToken($identifier, $token)
+    {
+        return $this->retrieveById($identifier);
+    }
+
+    public function updateRememberToken(UserInterface $user, $token)
+    {
+
+    }
+
+    public function retrieveById($identifier)
     {
         $filter = $this->config['filter'];
         if (strpos($filter, '&')) {
