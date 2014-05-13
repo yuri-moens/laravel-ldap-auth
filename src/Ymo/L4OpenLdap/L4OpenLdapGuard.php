@@ -11,13 +11,14 @@ use Illuminate\Auth\Guard;
  *
  */
 
- class L4OpenLdapGuard extends Guard
- {
- 	public function admin()
- 	{
- 		if ($this->check() && $this->user())
- 			return $this->user()->type == 0;
+class L4OpenLdapGuard extends Guard
+{
+    public function admin()
+    {
+        if ($this->check() && $this->user()) {
+            return $this->user()->type == 0;
+        }
 
- 		return false;
- 	}
- }
+        return false;
+    }
+}
