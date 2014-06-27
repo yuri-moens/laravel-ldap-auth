@@ -135,9 +135,11 @@ class L4OpenLdapUserProvider implements UserProviderInterface
      */
     public function updateRememberToken(UserInterface $user, $token)
     {
-        $user->setAttribute($user->getRememberTokenName(), $token);
+        if (! $user instanceof GenericUser) {
+            $user->setAttribute($user->getRememberTokenName(), $token);
 
-        $user->save();
+            $user->save();
+        }
     }
 
     /**
