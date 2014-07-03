@@ -55,6 +55,6 @@ class L4OpenLdapServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return [ 'ldap' ];
+        return array('ldap');
     }
 }
