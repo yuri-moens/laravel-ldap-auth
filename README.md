@@ -8,7 +8,7 @@ Add the following to your `composer.json` file.
 
 ```
 require {
-	"ymo/l4-openldap": "dev-master"
+	"ymo/l4-openldap": "~1.0"
 }
 ```
 
