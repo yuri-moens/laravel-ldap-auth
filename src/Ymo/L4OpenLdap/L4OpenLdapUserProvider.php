@@ -10,7 +10,7 @@ use Illuminate\Auth\UserProviderInterface;
 use Illuminate\Database\Connection;
 
 /**
- * An OpenLDAP authentication driver for Laravel 4.
+ * An OpenLDAP authentication driver for Laravel.
  *
  * @author Yuri Moens (yuri.moens@gmail.com)
  *

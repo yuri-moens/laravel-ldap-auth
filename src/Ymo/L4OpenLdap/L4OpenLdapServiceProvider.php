@@ -6,7 +6,7 @@ use Illuminate\Auth\Guard;
 use Illuminate\Support\ServiceProvider;
 
 /**
- * An OpenLDAP authentication driver for Laravel 4.
+ * An OpenLDAP authentication driver for Laravel.
  *
  * @author Yuri Moens (yuri.moens@gmail.com)
  *
