@@ -5,8 +5,8 @@ namespace Ymo\L4OpenLdap;
 use Config;
 use Exception;
 use Illuminate\Auth\GenericUser;
-use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\UserProviderInterface;
+use Illuminate\Contracts\Auth\User as UserContract;
 use Illuminate\Database\Connection;
 
 /**
@@ -84,7 +84,7 @@ class L4OpenLdapUserProvider implements UserProviderInterface
      * Retrieve a user by their unique identifier.
      * 
      * @param  mixed $identifier
-     * @return \Illuminate\Auth\UserInterface|null
+     * @return \Illuminate\Contracts\Auth\User|null
      */
     public function retrieveById($identifier)
     {
@@ -109,7 +109,7 @@ class L4OpenLdapUserProvider implements UserProviderInterface
      * 
      * @param  mixed $identifier
      * @param  string $token
-     * @return \Illuminate\Auth\UserInterface|null
+     * @return \Illuminate\Contracts\Auth\User|null
      */
     public function retrieveByToken($identifier, $token)
     {
@@ -129,11 +129,11 @@ class L4OpenLdapUserProvider implements UserProviderInterface
     /**
      * Update the "remember me" token for the given user in storage.
      * 
-     * @param  \Illuminate\Auth\UserInterface $user
+     * @param  \Illuminate\Contracts\Auth\User $user
      * @param  string $token
      * @return void
      */
-    public function updateRememberToken(UserInterface $user, $token)
+    public function updateRememberToken(UserContract $user, $token)
     {
         if (! $user instanceof GenericUser) {
             $user->setAttribute($user->getRememberTokenName(), $token);
@@ -146,7 +146,7 @@ class L4OpenLdapUserProvider implements UserProviderInterface
      * Retrieve a user by the given credentials.
      * 
      * @param  array  $credentials
-     * @return \Illuminate\Auth\UserInterface|null
+     * @return \Illuminate\Contracts\Auth\User|null
      */
     public function retrieveByCredentials(array $credentials)
     {
@@ -168,11 +168,11 @@ class L4OpenLdapUserProvider implements UserProviderInterface
     /**
      * Validate a user against the given credentials.
      * 
-     * @param  \Illuminate\Auth\UserInterface  $user
+     * @param  \Illuminate\Contracts\Auth\User  $user
      * @param  array
      * @return boolean
      */
-    public function validateCredentials(UserInterface $user, array $credentials)
+    public function validateCredentials(UserContract $user, array $credentials)
     {
         if ($user == null) {
             return false;
