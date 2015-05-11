@@ -23,38 +23,39 @@ class L4OpenLdapServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap the application events.
-     * 
+     *
      * @return void
      */
     public function boot()
     {
-        $this->package('ymo/l4-openldap');
-
-        $this->app['auth']->extend('ldap', function ($app) {
-            return new Guard(
-                new L4OpenLdapUserProvider($app['db']->connection()),
-                $app->make('session.store')
-            );
-        });
+        $this->publishes([
+            __DIR__ . '/../config/config.php' => config_path('l4-openldap.php'),
+        ]);
     }
 
     /**
      * Register the service provider.
-     * 
+     *
      * @return void
      */
     public function register()
     {
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/config.php', 'l4-openldap'
+        );
 
+        $this->app['auth']->extend('ldap', function ($app) {
+            return $app->make('Ymo\L4OpenLdap\L4OpenLdapUserProvider');
+        });
     }
 
     /**
      * Get the services provided by the provider.
-     * 
+     *
      * @return array
      */
     public function provides()
     {
-        return array('ldap');
+        return [ 'auth' ];
     }
 }

@@ -24,4 +24,4 @@ Open `config/auth.php` and change the authentication driver to `ldap`.
 
 Run `php artisan publish:config ymo/l4-openldap` and adjust the config file for your LDAP settings.
 
-It can be found in `config/packages/ymo/l4-openldap`.
+It can be found in `config/l4-openldap`.
